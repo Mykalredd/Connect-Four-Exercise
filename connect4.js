@@ -31,8 +31,9 @@ makeHtmlBoard() {
   
   const top = document.createElement('tr');
   top.setAttribute('id', 'column-top');
-  this.handleNewClick = this.handleClick.bind(this);
+  this.handleGameClick = this.handleClick.bind(this);
   
+  top.addEventListener("click", this.handleNewClick);
 
   for (let x = 0; x < this.width; x++) {
     const headCell = document.createElement('td');
@@ -41,7 +42,7 @@ makeHtmlBoard() {
   }
 
   board.append(top);
-  top.addEventListener("click", this.handleNewClick);
+  // top.addEventListener("click", this.handleNewClick);
 
   for (let y = 0; y < this.height; y++) {
     const row = document.createElement('tr');
@@ -80,8 +81,8 @@ placeInTable(y, x) {
 
 endGame(msg) {
   alert(msg);
-  const top = document.querySelector("column-top");
-  top.removeEventListener("Click", this.handleNewClick);
+  const top = document.querySelector("#column-top");
+  top.removeEventListener("Click", this.handleGameClick);
 }
 
 
