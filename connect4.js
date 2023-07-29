@@ -6,18 +6,13 @@ class Game {
     this.height = height;
     this.width = width;
     this.currPlayer = p1;
+    this.board = [];
     this.makeBoard();
     this.makeHtmlBoard();
     this.gameOver = false;
   }
-}
-
-
-
-
 
 makeBoard() {
-  this.board = [];
   for (let y = 0; y < this.height; y++) {
     this.board.push(Array.from({ length: this.width }));
   }
@@ -25,15 +20,14 @@ makeBoard() {
 
 
 makeHtmlBoard() {
-  const board = document.getElementById('board');
-  board.innerHTML = '';
+  const gameBoard = document.getElementById('board');
 
   
   const top = document.createElement('tr');
   top.setAttribute('id', 'column-top');
   this.handleGameClick = this.handleClick.bind(this);
   
-  top.addEventListener("click", this.handleNewClick);
+  top.addEventListener("click", this.handleGameClick);
 
   for (let x = 0; x < this.width; x++) {
     const headCell = document.createElement('td');
@@ -41,8 +35,8 @@ makeHtmlBoard() {
     top.append(headCell);
   }
 
-  board.append(top);
-  // top.addEventListener("click", this.handleNewClick);
+  gameBoard.append(top);
+  // top.addEventListener("click", this.handleGameClick);
 
   for (let y = 0; y < this.height; y++) {
     const row = document.createElement('tr');
@@ -53,7 +47,7 @@ makeHtmlBoard() {
       row.append(cell);
     }
 
-    board.append(row);
+    gameBoard.append(row);
   }
 }
 
@@ -100,12 +94,12 @@ handleClick(evt) {
 
   if (this.checkForWin()) {
     this.gameOver = true;
-    return this.endGame(`Player ${this.currPlayer.color} won!`);
+    return setTimeout(() => this.endGame(`Player ${this.currPlayer} won!`));
   }
   
 
   if (this.board.every(row => row.every(cell => cell))) {
-    return this.endGame('Tie!');
+    return setTimeout(() => this.endGame('Tie!'));
   }
     
   this.currPlayer = this.currPlayer === this.players[0] ? this.players[1] : this.players[0];
@@ -135,19 +129,20 @@ checkForWin() {
 
        if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
-       }
-    }
-  }
-}
- 
-class Player {
-  constructor(color) {
-this.color = color;
+        }
+     }
+   }
  }
-}
+}; 
 
-document.getElementById('press-to-start').addEventListener('click', () => {
-  let p1 = new Player(document.getElementById('1stColor').value);
-  let p2 = new Player(document.getElementById('2ndColor').value);
+class Player {
+  constructor (color) {
+    this.color = color;
+ }
+};
+
+document.getElementById('startGame').addEventListener('click', () => {
+  let p1 = new Player(document.getElementById('p1-Color').value);
+  let p2 = new Player(document.getElementById('p2-Color').value);
   new Game(p1, p2);
 });
